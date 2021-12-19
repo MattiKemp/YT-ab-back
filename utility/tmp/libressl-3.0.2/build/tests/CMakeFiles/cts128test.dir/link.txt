@@ -1,1 +1,0 @@
-/usr/bin/cc  -O2 -Wall -O3 -DNDEBUG  -rdynamic CMakeFiles/cts128test.dir/cts128test.c.o  -o cts128test  ../tls/libtls.a ../ssl/libssl.a ../crypto/libcrypto.a -lpthread -lrt 

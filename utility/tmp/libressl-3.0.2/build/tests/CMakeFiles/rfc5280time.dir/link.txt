@@ -1,1 +1,0 @@
-/usr/bin/cc  -O2 -Wall -O3 -DNDEBUG  -rdynamic CMakeFiles/rfc5280time.dir/rfc5280time.c.o  -o rfc5280time  ../tls/libtls.a ../ssl/libssl.a ../crypto/libcrypto.a -lpthread -lrt 

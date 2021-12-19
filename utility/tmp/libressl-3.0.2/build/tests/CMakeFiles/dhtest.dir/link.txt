@@ -1,1 +1,0 @@
-/usr/bin/cc  -O2 -Wall -O3 -DNDEBUG  -rdynamic CMakeFiles/dhtest.dir/dhtest.c.o  -o dhtest  ../tls/libtls.a ../ssl/libssl.a ../crypto/libcrypto.a -lpthread -lrt 

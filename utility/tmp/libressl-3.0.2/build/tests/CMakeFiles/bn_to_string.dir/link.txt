@@ -1,1 +1,0 @@
-/usr/bin/cc  -O2 -Wall -O3 -DNDEBUG  -rdynamic CMakeFiles/bn_to_string.dir/bn_to_string.c.o  -o bn_to_string  ../tls/libtls.a ../ssl/libssl.a ../crypto/libcrypto.a -lpthread -lrt 

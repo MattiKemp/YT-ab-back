@@ -1,1 +1,0 @@
-/usr/bin/cc  -O2 -Wall -O3 -DNDEBUG  -rdynamic CMakeFiles/key_schedule.dir/key_schedule.c.o  -o key_schedule  ../tls/libtls.a ../ssl/libssl.a ../crypto/libcrypto.a -lpthread -lrt 

@@ -1,0 +1,5 @@
+g++ -std=c++11 postsDbHandler.cpp -o postsDB  -L/mnt/c/Users/Eatme/Desktop/Company/mariadb-connector-cpp-1.0.1-ubuntu-focal-amd64/lib64/mariadb -lmariadbcpp
+
+The aysnc websocket server is copied and modified from: https://github.com/oatpp/example-websocket/tree/master/async-server/
+
+We should actually learn oatpp for when we actually develop this project, seems like a really good and powerful library.

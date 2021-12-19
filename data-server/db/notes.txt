@@ -1,0 +1,3 @@
+gcc poolInit.c -o poolInit libpqnb.so -Wl,-rpath=$(pwd) -lpq
+
+g++ nb_db.cpp poolInit.c -o nb_db libpqnb.so -Wl,-rpath,/home/server/early-dev/init-backend/data-server/db/ -lpq

@@ -35,21 +35,28 @@ public:
   /**
    *  Create ConnectionProvider component which listens on the port
    */
-  OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ServerConnectionProvider>, serverConnectionProvider)([] {
-    // ssl cert file pathing
-    OATPP_LOGD("oatpp::libressl::Config", "pem='%s'", CERT_PEM_PATH);
-    OATPP_LOGD("oatpp::libressl::Config", "crt='%s'", CERT_CRT_PATH);
-    auto config = oatpp::libressl::Config::createDefaultServerConfigShared(CERT_CRT_PATH, CERT_PEM_PATH /* private key */);
+   // This is the non ssl connection provider, we will use this for testing as we don't need to deal with certs
+   // and shit. When deploying, we will switch to the below connection provider.
+    OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ServerConnectionProvider>, serverConnectionProvider)([] {
+        /* non_blocking connections should be used with AsyncHttpConnectionHandler for AsyncIO */
+        return oatpp::network::tcp::server::ConnectionProvider::createShared({"0.0.0.0", 9000, oatpp::network::Address::IP_4});
+      }());
 
-    /**
-     * if you see such error:
-     * oatpp::libressl::server::ConnectionProvider:Error on call to 'tls_configure'. ssl context failure
-     * It might be because you have several ssl libraries installed on your machine.
-     * Try to make sure you are using libtls, libssl, and libcrypto from the same package
-     */
-
-    return oatpp::libressl::server::ConnectionProvider::createShared(config, {"0.0.0.0", 8000, oatpp::network::Address::IP_4});
-  }());
+//  OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ServerConnectionProvider>, serverConnectionProvider)([] {
+//    // ssl cert file pathing
+//    OATPP_LOGD("oatpp::libressl::Config", "pem='%s'", CERT_PEM_PATH);
+//    OATPP_LOGD("oatpp::libressl::Config", "crt='%s'", CERT_CRT_PATH);
+//    auto config = oatpp::libressl::Config::createDefaultServerConfigShared(CERT_CRT_PATH, CERT_PEM_PATH /* private key */);
+//
+//    /**
+//     * if you see such error:
+//     * oatpp::libressl::server::ConnectionProvider:Error on call to 'tls_configure'. ssl context failure
+//     * It might be because you have several ssl libraries installed on your machine.
+//     * Try to make sure you are using libtls, libssl, and libcrypto from the same package
+//     */
+//
+//    return oatpp::libressl::server::ConnectionProvider::createShared(config, {"0.0.0.0", 8000, oatpp::network::Address::IP_4});
+//  }());
   
   /**
    *  Create Router component

@@ -19,6 +19,7 @@ struct UserCreds{
     // idk if this is the best way to do this :/
     UserCreds(): hash(""), salt(""), time(0){}
     UserCreds(string hash, string salt, unsigned long long time): hash(hash), salt(salt), time(time){}
+    void set(string hash, string salt, unsigned long long time){this->hash = hash; this->salt = salt; this->time = time;};
 };
 
 class UserHandler{

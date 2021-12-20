@@ -32,8 +32,8 @@ protected:
     : oatpp::web::server::api::ApiController(objectMapper)
     {}
 private:
-    bool validateLogin(const oatpp::String& credentials) const;
-    bool signUp(const oatpp::String& info) const;
+    string validateLogin(const oatpp::String& credentials) const;
+    string signUp(const oatpp::String& info) const;
 public:
   
   /**
@@ -55,12 +55,12 @@ public:
     }
 
     Action returnResponse(const oatpp::String& body){
-      bool validation = controller->validateLogin(body);
+      string qResult = controller->validateLogin(body);
       //put this part inside validateLogin later, too lazy to do it rn lol.
-      string qResult = "{\"valid\":\"NO\"}";
-      if(validation){
-        qResult = "{\"valid\":\"YES\"}";
-      }
+      //string qResult = "{\"valid\":\"NO\"}";
+      //if(validation){
+      //  qResult = "{\"valid\":\"YES\"}";
+      //}
       auto response = controller->createResponse(Status::CODE_200, qResult);
       response->putHeaderIfNotExists("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE");
       response->putHeaderIfNotExists("Access-Control-Allow-Origin", "*");
@@ -77,11 +77,11 @@ public:
     }
 
     Action returnResponse(const oatpp::String& body){
-      bool validation = controller->signUp(body);
-      string qResult = "{\"valid\":\"NO\"}";
-      if(validation){
-        qResult = "{\"valid\":\"YES\"}";
-      }
+      string qResult = controller->signUp(body);
+      //string qResult = "{\"valid\":\"NO\"}";
+      //if(validation){
+      //  qResult = "{\"valid\":\"YES\"}";
+      //}
       auto response = controller->createResponse(Status::CODE_200, qResult);
       response->putHeaderIfNotExists("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE");
       response->putHeaderIfNotExists("Access-Control-Allow-Origin", "*");

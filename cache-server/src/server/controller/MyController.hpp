@@ -3,15 +3,15 @@
 #include <iostream>
 #include <nlohmann/json.hpp>
 #include <string>
-#include "clients/GraphApiClient.hpp"
-#include "clients/CCApiClient.hpp"
-#include "dto/MyDTOs.hpp"
+#include "server/clients/GraphApiClient.hpp"
+#include "server/clients/CCApiClient.hpp"
+#include "server/dto/MyDTOs.hpp"
 #include "oatpp/web/client/RequestExecutor.hpp"
 #include "oatpp/web/server/api/ApiController.hpp"
 #include "oatpp/core/macro/codegen.hpp"
 #include "oatpp/core/macro/component.hpp"
 #include "oatpp/parser/json/mapping/ObjectMapper.hpp"
-#include "db/nb_db.h"
+#include "database/nb_db.h"
 
 #include OATPP_CODEGEN_BEGIN(ApiController) //<--- Begin codegen
 

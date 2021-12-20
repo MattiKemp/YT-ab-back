@@ -10,16 +10,16 @@ set(CMAKE_CXX_STANDARD 11)
 include_directories(src)
 
 add_library(${project_name}-lib
-	src/AppComponent.hpp
-        src/controller/MyController.hpp
-        src/controller/MyController.cpp
-        src/db/nb_db.cpp
-        src/db/nb_db.h
-        src/db/poolInit.c/
-        src/db/poolInit.h/
-        src/clients/GraphApiClient.hpp
-        src/clients/CCApiClient.hpp
-        src/dto/MyDTOs.hpp
+	src/server/AppComponent.hpp
+    src/server/controller/MyController.hpp
+    src/server/controller/MyController.cpp
+    src/server/clients/GraphApiClient.hpp
+    src/server/clients/CCApiClient.hpp
+    src/server/dto/MyDTOs.hpp
+    src/database/nb_db.cpp
+    src/database/nb_db.h
+    src/database/poolInit.c/
+    src/database/poolInit.h/
 )
 
 target_include_directories(${project_name}-lib PUBLIC src)
@@ -52,37 +52,37 @@ if(NOT json_POPULATED)
 endif()
 
 target_link_libraries(${project_name}-lib
-        PUBLIC oatpp::oatpp
-        PUBLIC oatpp::oatpp-test
-        #PUBLIC oatpp::oatpp-websocket
-        PUBLIC oatpp::oatpp-libressl
-        PUBLIC oatpp::oatpp-swagger
+    PUBLIC oatpp::oatpp
+    PUBLIC oatpp::oatpp-test
+    #PUBLIC oatpp::oatpp-websocket
+    PUBLIC oatpp::oatpp-libressl
+    PUBLIC oatpp::oatpp-swagger
 	PUBLIC oatpp::oatpp-postgresql
 	#PUBLIC mysqlcppconn
 	#PUBLIC mysqlclient
 
-        PUBLIC LibreSSL::TLS
-        PUBLIC LibreSSL::SSL
-        PUBLIC LibreSSL::Crypto
-        
-        # might not need this anymore
-        PUBLIC nlohmann_json::nlohmann_json
+    PUBLIC LibreSSL::TLS
+    PUBLIC LibreSSL::SSL
+    PUBLIC LibreSSL::Crypto
+    
+    # might not need this anymore
+    PUBLIC nlohmann_json::nlohmann_json
 
-        PUBLIC ssl
-        PUBLIC crypto
+    PUBLIC ssl
+    PUBLIC crypto
 
 )
 
 
 # ssl cert
 add_definitions(
-        -DCERT_PEM_PATH="${CMAKE_CURRENT_LIST_DIR}/cert/temp_key.key"
-        -DCERT_CRT_PATH="${CMAKE_CURRENT_LIST_DIR}/cert/temp_cert.crt"
+    -DCERT_PEM_PATH="${CMAKE_CURRENT_LIST_DIR}/cert/temp_key.key"
+    -DCERT_CRT_PATH="${CMAKE_CURRENT_LIST_DIR}/cert/temp_cert.crt"
 )
 
 
 add_executable(${project_name}-exe
-        src/App.cpp
+    src/server/App.cpp
 )
 
 target_link_libraries(${project_name}-exe ${project_name}-lib)

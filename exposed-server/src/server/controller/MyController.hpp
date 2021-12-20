@@ -3,15 +3,15 @@
 #include <iostream>
 #include <nlohmann/json.hpp>
 #include <string>
-#include "clients/GraphApiClient.hpp"
-#include "clients/CCApiClient.hpp"
-#include "dto/MyDTOs.hpp"
+#include "server/clients/GraphApiClient.hpp"
+#include "server/clients/CCApiClient.hpp"
+#include "server/dto/MyDTOs.hpp"
 #include "oatpp/web/client/RequestExecutor.hpp"
 #include "oatpp/web/server/api/ApiController.hpp"
 #include "oatpp/core/macro/codegen.hpp"
 #include "oatpp/core/macro/component.hpp"
 #include "oatpp/parser/json/mapping/ObjectMapper.hpp"
-#include "db/nb_db.h"
+#include "user/userHandler.h"
 
 #include OATPP_CODEGEN_BEGIN(ApiController) //<--- Begin codegen
 
@@ -26,7 +26,7 @@ protected:
 public:
   OATPP_COMPONENT(std::shared_ptr<GraphApiClient>, gApiClient);
   OATPP_COMPONENT(std::shared_ptr<CCApiClient>, ccApiClient);
-  std::shared_ptr<NbDB> db = std::shared_ptr<NbDB>(new NbDB("test", "Password22!", "localhost", "workoutdev"));
+  std::shared_ptr<UserHandler> uHand = std::shared_ptr<UserHandler>(new UserHandler());
 protected:
   MyController(const std::shared_ptr<ObjectMapper>& objectMapper)
     : oatpp::web::server::api::ApiController(objectMapper)

@@ -37,26 +37,26 @@ public:
    */
    // This is the non ssl connection provider, we will use this for testing as we don't need to deal with certs
    // and shit. When deploying, we will switch to the below connection provider.
-    OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ServerConnectionProvider>, serverConnectionProvider)([] {
-        /* non_blocking connections should be used with AsyncHttpConnectionHandler for AsyncIO */
-        return oatpp::network::tcp::server::ConnectionProvider::createShared({"0.0.0.0", 9000, oatpp::network::Address::IP_4});
-      }());
+//    OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ServerConnectionProvider>, serverConnectionProvider)([] {
+//        /* non_blocking connections should be used with AsyncHttpConnectionHandler for AsyncIO */
+//        return oatpp::network::tcp::server::ConnectionProvider::createShared({"0.0.0.0", 9000, oatpp::network::Address::IP_4});
+//      }());
 
-//  OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ServerConnectionProvider>, serverConnectionProvider)([] {
-//    // ssl cert file pathing
-//    OATPP_LOGD("oatpp::libressl::Config", "pem='%s'", CERT_PEM_PATH);
-//    OATPP_LOGD("oatpp::libressl::Config", "crt='%s'", CERT_CRT_PATH);
-//    auto config = oatpp::libressl::Config::createDefaultServerConfigShared(CERT_CRT_PATH, CERT_PEM_PATH /* private key */);
-//
-//    /**
-//     * if you see such error:
-//     * oatpp::libressl::server::ConnectionProvider:Error on call to 'tls_configure'. ssl context failure
-//     * It might be because you have several ssl libraries installed on your machine.
-//     * Try to make sure you are using libtls, libssl, and libcrypto from the same package
-//     */
-//
-//    return oatpp::libressl::server::ConnectionProvider::createShared(config, {"0.0.0.0", 8000, oatpp::network::Address::IP_4});
-//  }());
+  OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ServerConnectionProvider>, serverConnectionProvider)([] {
+    // ssl cert file pathing
+    OATPP_LOGD("oatpp::libressl::Config", "pem='%s'", CERT_PEM_PATH);
+    OATPP_LOGD("oatpp::libressl::Config", "crt='%s'", CERT_CRT_PATH);
+    auto config = oatpp::libressl::Config::createDefaultServerConfigShared(CERT_CRT_PATH, CERT_PEM_PATH /* private key */);
+
+    /**
+     * if you see such error:
+     * oatpp::libressl::server::ConnectionProvider:Error on call to 'tls_configure'. ssl context failure
+     * It might be because you have several ssl libraries installed on your machine.
+     * Try to make sure you are using libtls, libssl, and libcrypto from the same package
+     */
+
+    return oatpp::libressl::server::ConnectionProvider::createShared(config, {"0.0.0.0", 9000, oatpp::network::Address::IP_4});
+  }());
   
   /**
    *  Create Router component
@@ -107,7 +107,7 @@ public:
     auto config = oatpp::libressl::Config::createShared();
     tls_config_insecure_noverifycert(config->getTLSConfig());
     tls_config_insecure_noverifyname(config->getTLSConfig());
-    return oatpp::libressl::client::ConnectionProvider::createShared(config, {"0.0.0.0", 8003});
+    return oatpp::libressl::client::ConnectionProvider::createShared(config, {"0.0.0.0", 9001});
   }());
   
   /**
@@ -126,6 +126,44 @@ public:
     auto requestExecutor = oatpp::web::client::HttpRequestExecutor::createShared(connectionProvider);
     return CCApiClient::createShared(requestExecutor, objectMapper);
   }());
+
+//    /**
+//     *  General API docs info
+//     */
+//    OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::swagger::DocumentInfo>, swaggerDocumentInfo)([] {
+//
+//      oatpp::swagger::DocumentInfo::Builder builder;
+//
+//      builder
+//      .setTitle("Exposed Server")
+//      .setDescription("CRUD API Example project with swagger docs")
+//      .setVersion("1.0")
+//      .setContactName("Tugma")
+//      .setContactUrl("https://tugma.com/")
+//
+//      .setLicenseName("Apache License, Version 2.0")
+//      .setLicenseUrl("http://www.apache.org/licenses/LICENSE-2.0")
+//
+//      .addServer("http://localhost:9001", "server on localhost");
+//
+//      // When you are using the AUTHENTICATION() Endpoint-Macro you must add an SecurityScheme object (https://swagger.io/specification/#securitySchemeObject)
+//      // For basic-authentication you can use the default Basic-Authorization-Security-Scheme like this
+//      // For more complex authentication schemes you can use the oatpp::swagger::DocumentInfo::SecuritySchemeBuilder builder
+//      // Don't forget to add info->addSecurityRequirement("basic_auth") to your ENDPOINT_INFO() Macro!
+//      //.addSecurityScheme("basic_auth", oatpp::swagger::DocumentInfo::SecuritySchemeBuilder::DefaultBasicAuthorizationSecurityScheme());
+//
+//      return builder.build();
+//
+//    }());
+//
+//
+//    /**
+//     *  Swagger-Ui Resources (<oatpp-examples>/lib/oatpp-swagger/res)
+//     */
+//    OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::swagger::Resources>, swaggerResources)([] {
+//      // Make sure to specify correct full path to oatpp-swagger/res folder !!!
+//      return oatpp::swagger::Resources::loadResources("<YOUR-PATH-TO-REPO>/lib/oatpp-swagger/res");
+//    }());
 
 };
 

@@ -20,8 +20,8 @@ add_library(${project_name}-lib
     src/database/nb_db.h
     src/database/poolInit.c/
     src/database/poolInit.h/
-    src/database/cache_db_handler.cpp
-    src/database/cache_db_handler.h
+    src/database/cacheDbHandler.h
+    src/database/cacheDbHandler.cpp
     src/cache/linked_list.cpp
     src/cache/linked_list.h
     src/cache/lru_cache.cpp
@@ -88,7 +88,7 @@ add_definitions(
 
 
 add_executable(${project_name}-exe
-    src/server/App.cpp
+    src/cache/lru_cache_test.cpp
 )
 
 target_link_libraries(${project_name}-exe ${project_name}-lib)

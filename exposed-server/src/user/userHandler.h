@@ -28,6 +28,7 @@ private:
     std::shared_ptr<NbDB> db = std::shared_ptr<NbDB>(new NbDB("", "", "localhost", "adblock"));
 public:
     UserHandler();
+    void printCache();
     bool addToCache(string username, string hash, string salt);
     bool createUser(string username, string password, string email);
     bool validate(string username, string password);

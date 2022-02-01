@@ -5,6 +5,13 @@ UserHandler::UserHandler(){
     this->userCache = userCache;
 }
 
+void UserHandler::printCache(){
+    for(const auto& n : this->userCache){
+        cout << n.first << endl;
+        cout << n.second.hash << endl;
+    }
+}
+
 bool UserHandler::addToCache(string username, string hash, string salt){
     UserCreds newCred = UserCreds(hash, salt, std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
     // believe this function is for if it fails.
@@ -24,14 +31,15 @@ bool UserHandler::validate(string username, string password){
     UserCreds val;
     auto func = [&val](UserCreds& v) { val = v; };
     if(this->userCache.if_contains(username, func)){
+        cout << "cached user" << endl;
         return sha256_with_salt(password, val.salt) == val.hash;
     }
     vector<vector<DBValue>> info;
     this->db->userCredQuery(username, info);
     // add error checking here and in NbDB later.
     addToCache(username, info[0][0].strVal, info[0][1].strVal);
-    //cout << info[0][0].strVal << endl;
-    //cout << info[0][1].strVal << endl;
+//    cout << info[0][0].strVal << endl;
+//    cout << info[0][1].strVal << endl;
     return sha256_with_salt(password, info[0][1].strVal) == info[0][0].strVal;
 }
 

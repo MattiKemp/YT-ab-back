@@ -13,7 +13,14 @@
 class CCApiClient : public oatpp::web::client::ApiClient {
   
   API_CLIENT_INIT(CCApiClient)
+
+  API_CALL("POST", "/print", printLL, BODY_STRING(String, body))
   
+  API_CALL("POST", "/timestamp-create", timestampCreate, BODY_STRING(String, body))
+
+  API_CALL("POST", "/timestamp-remove", timestampRemove, BODY_STRING(String, body))
+
+  API_CALL("POST", "/timestamp-get", timestampGet, BODY_STRING(String, body))
   
 };
 

@@ -1,22 +1,47 @@
 #include "MyController.hpp"
 
-/* method for validating login credentials
-   Input: username, password */
-bool MyController::validateLogin(const oatpp::String& credentials) const{
-    //cout << "validate endpoint" << endl;
+// endpoint function to print the linked list
+string MyController::printLL(const oatpp::String& credentials) const{
+    this->cache->printLinkedList();
+    return "{\"valid\":\"YES\"}";
+}
+
+// endpoint to add a timestamp to the cache and queue up the timestamp for the database
+string MyController::createTS(const oatpp::String& credentials) const{
+    cout << "create timestamp endpoint" << endl;
     auto j = nlohmann::json::parse(credentials->c_str());
-    cout << j["user"] << endl;
-    string userTemp = j["user"];
-    string passTemp = j["pass"];
-    return false;
-    //return UsersAsyncDBHandler::validate(this->db, j["user"], j["pass"]);
+    cout << j.dump() << endl;
+    string times = j["adTimes"];
+    Timestamp new_timestamp = Timestamp();
+    new_timestamp.up_votes = 10;
+//    for(int i = 0; i < times.size(); i+=2){
+//        new_timestamp.ad_times.push_back(make_pair(times[i], times[i+1]));
+//    }
+    new_timestamp.ad_times = times;
+    // not sure if we should set null pointers for the initial prev and next :/
+    // need to look more into this.
+    Node * temp = new Node();
+    temp->timestamps.push_back(new_timestamp);
+    this->cache->addNB(j["url"], temp);
+    //this->cache->addBlocking(j["url"], temp);
+    return "{\"valid\":\"YES\"}";
 }
 
-/* method for signing up a user (not implemented)
-   Input: username, password, first name, last name, phone number */
-bool MyController::signUp(const oatpp::String& info) const{
-    //cout << "signup endpoint" << endl;
-    auto j = nlohmann::json::parse(info->c_str());
-    return true;
+string MyController::removeTS(const oatpp::String& credentials) const{
+    cout << "remove timestamp endpoint" << endl;
+    auto j = nlohmann::json::parse(credentials->c_str());
+    cout << j.dump() << endl;
+    this->cache->removeNB(j["url"]);
+    return "{\"valid\":\"YES\"}";
 }
 
+// this is basically get top timestamp
+string MyController::getTS(const oatpp::String& credentials) const{
+    cout << "get timestamp endpoint" << endl;
+    auto j = nlohmann::json::parse(credentials->c_str());
+    cout << j.dump() << endl;
+    nlohmann::json result;
+    //result["adTimes"] = this->cache->getTimestampBlocking(j["url"]).ad_times;
+    result["adTimes"] = this->cache->getTimestampNB(j["url"]).ad_times;
+    return result.dump();
+}

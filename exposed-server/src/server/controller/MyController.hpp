@@ -34,6 +34,10 @@ protected:
 private:
     string validateLogin(const oatpp::String& credentials) const;
     string signUp(const oatpp::String& info) const;
+    string printLL(const oatpp::String& credentials) const;
+    string createTimestamp(const oatpp::String& credentials) const;
+    string removeTimestamp(const oatpp::String& credentials) const;
+    string getTimestamp(const oatpp::String& credentials) const;
 public:
   
   /**
@@ -56,11 +60,6 @@ public:
 
     Action returnResponse(const oatpp::String& body){
       string qResult = controller->validateLogin(body);
-      //put this part inside validateLogin later, too lazy to do it rn lol.
-      //string qResult = "{\"valid\":\"NO\"}";
-      //if(validation){
-      //  qResult = "{\"valid\":\"YES\"}";
-      //}
       auto response = controller->createResponse(Status::CODE_200, qResult);
       response->putHeaderIfNotExists("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE");
       response->putHeaderIfNotExists("Access-Control-Allow-Origin", "*");
@@ -78,10 +77,74 @@ public:
 
     Action returnResponse(const oatpp::String& body){
       string qResult = controller->signUp(body);
-      //string qResult = "{\"valid\":\"NO\"}";
-      //if(validation){
-      //  qResult = "{\"valid\":\"YES\"}";
-      //}
+      auto response = controller->createResponse(Status::CODE_200, qResult);
+      response->putHeaderIfNotExists("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE");
+      response->putHeaderIfNotExists("Access-Control-Allow-Origin", "*");
+      response->putHeaderIfNotExists("Access-Control-Max-Age", "1728000");
+      return _return(response);
+    }
+  };
+
+  ADD_CORS(PrintLL, "*", "GET, POST, OPTIONS", "DNT, User-Agent, X-Requested-With, If-Modified-Since, Cache-Control, Content-Type, Range", "1728000")
+  ENDPOINT_ASYNC("POST", "/print", PrintLL) {
+    ENDPOINT_ASYNC_INIT(PrintLL)
+    Action act() override {
+      return request->readBodyToStringAsync().callbackTo(&PrintLL::returnResponse);
+    }
+
+    Action returnResponse(const oatpp::String& body){
+      string qResult = controller->printLL(body);
+      auto response = controller->createResponse(Status::CODE_200, qResult);
+      response->putHeaderIfNotExists("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE");
+      response->putHeaderIfNotExists("Access-Control-Allow-Origin", "*");
+      response->putHeaderIfNotExists("Access-Control-Max-Age", "1728000");
+      return _return(response);
+    }
+  };
+
+  ADD_CORS(TimestampCreate, "*", "GET, POST, OPTIONS", "DNT, User-Agent, X-Requested-With, If-Modified-Since, Cache-Control, Content-Type, Range", "1728000")
+  ENDPOINT_ASYNC("POST", "/timestamp-create", TimestampCreate) {
+    ENDPOINT_ASYNC_INIT(TimestampCreate)
+    Action act() override {
+      return request->readBodyToStringAsync().callbackTo(&TimestampCreate::returnResponse);
+    }
+
+    Action returnResponse(const oatpp::String& body){
+      string qResult = controller->createTimestamp(body);
+      auto response = controller->createResponse(Status::CODE_200, qResult);
+      response->putHeaderIfNotExists("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE");
+      response->putHeaderIfNotExists("Access-Control-Allow-Origin", "*");
+      response->putHeaderIfNotExists("Access-Control-Max-Age", "1728000");
+      return _return(response);
+    }
+  };
+
+  ADD_CORS(TimestampRemove, "*", "GET, POST, OPTIONS", "DNT, User-Agent, X-Requested-With, If-Modified-Since, Cache-Control, Content-Type, Range", "1728000")
+  ENDPOINT_ASYNC("POST", "/timestamp-remove", TimestampRemove) {
+    ENDPOINT_ASYNC_INIT(TimestampRemove)
+    Action act() override {
+      return request->readBodyToStringAsync().callbackTo(&TimestampRemove::returnResponse);
+    }
+
+    Action returnResponse(const oatpp::String& body){
+      string qResult = controller->removeTimestamp(body);
+      auto response = controller->createResponse(Status::CODE_200, qResult);
+      response->putHeaderIfNotExists("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE");
+      response->putHeaderIfNotExists("Access-Control-Allow-Origin", "*");
+      response->putHeaderIfNotExists("Access-Control-Max-Age", "1728000");
+      return _return(response);
+    }
+  };
+
+  ADD_CORS(TimestampGet, "*", "GET, POST, OPTIONS", "DNT, User-Agent, X-Requested-With, If-Modified-Since, Cache-Control, Content-Type, Range", "1728000")
+  ENDPOINT_ASYNC("POST", "/timestamp-get", TimestampGet) {
+    ENDPOINT_ASYNC_INIT(TimestampGet)
+    Action act() override {
+      return request->readBodyToStringAsync().callbackTo(&TimestampGet::returnResponse);
+    }
+
+    Action returnResponse(const oatpp::String& body){
+      string qResult = controller->getTimestamp(body);
       auto response = controller->createResponse(Status::CODE_200, qResult);
       response->putHeaderIfNotExists("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE");
       response->putHeaderIfNotExists("Access-Control-Allow-Origin", "*");

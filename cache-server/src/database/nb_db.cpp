@@ -13,7 +13,7 @@ NbDB::NbDB(string user, string pass, string database, string ip = "localhost"){
     this->ip = ip;
     this->database = database;
     struct PQNB_pool *pool;
-    pool = PQNB_pool_init("postgresql://test:Password22!@localhost/workoutdev?sslmode=disable", 32);
+    pool = PQNB_pool_init("postgresql://postgres:password@localhost/adblock?sslmode=disable", 32);
     assert(NULL != pool);
     const union PQNB_pool_info *info;
     int epoll_fd;
@@ -224,3 +224,18 @@ void NbDB::basicQuery(string table, int size, vector<vector<DBValue>> &addInfo){
     //return converted;
 }
 
+void NbDB::adstampAllQuery(vector<vector<DBValue>> &addInfo){
+    string stmt = "SELECT * FROM adstamp;";
+    //cout << stmt << endl;
+    PGresult* res = queryNB(pool, info, epoll_fd, stmt);
+    //cout << "converting" << endl;
+    convertResult(res, addInfo);
+    //cout << "about to return" << endl;
+    //return converted;
+}
+
+void NbDB::insertAdstampQuery(string url, string username, string times, int upvotes, string name){
+    string stmt = "INSERT INTO adstamp (url, username, times, upvotes, name) VALUES ('" + url + "', '" + username + "', '" + times + "', " + to_string(upvotes) + ", '" + name + "');";
+    //cout << stmt << endl;
+    PGresult* res = queryNB(pool, info, epoll_fd, stmt);
+}

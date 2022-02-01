@@ -55,6 +55,10 @@ public:
      * @param[out] addInfo the results of the query converted into a 2D vector of DBValues.
      */
     void basicQuery(string table, int size, vector<vector<DBValue>> &addInfo);
+
+    void adstampAllQuery(vector<vector<DBValue>> &addInfo);
+
+    void insertAdstampQuery(string url, string username, string times, int upvotes, string name);
     // Depricated, only really left in for testing.
     void printResult(PGresult *res);
 

@@ -28,8 +28,9 @@ public:
     void printLinkedList();
 
     // non-blocking functions
-    void addNB(string url, Node * node);
-    bool removeNB(string url);
+    //void addNB(string url, string username, Node * node);
+    void addNB(string url, string username, string adstamp);
+    bool removeNB(string url, string username);
     Timestamp getTimestampNB(string url);
     Timestamp getTopTimeStampNB(string url);
 

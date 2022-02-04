@@ -13,9 +13,30 @@ using namespace std;
 
 struct DBSyncQuery{
     bool insert;
+    string adstamp;
+    string name;
     bool remove;
     bool update;
     int upvotes;
+    DBSyncQuery(): insert(false), adstamp(""), name(""), remove(false), update(false), upvotes(0) {}
+    DBSyncQuery(bool insert, string adstamp, bool remove, bool update, int upvotes): insert(insert), adstamp(adstamp), remove(remove), update(update), upvotes(upvotes) {}
+    // constructor for insert query
+    DBSyncQuery(string adstamp, string name): insert(true), adstamp(adstamp), name(name), remove(false), update(false), upvotes(0) {}
+    // constructor for remove query
+    DBSyncQuery(bool remove): insert(false), adstamp(""), name(""), remove(remove), update(false), upvotes(0) {}
+    // constructor for update query
+    DBSyncQuery(bool update, int upvotes): insert(false), adstamp(""), name(""), remove(false), update(update), upvotes(upvotes) {}
+    void print(){
+        if(insert){
+            cout << "insert: " << adstamp << endl; 
+        }
+        else if(remove){
+            cout << "remove" << endl;
+        }
+        else if(update){
+            cout << "update: " << upvotes << endl;
+        }
+    }
 };
 
 class CacheDBHandler{
@@ -26,12 +47,18 @@ public:
     CacheDBHandler();
     void close(){};
     void isConnected(){};
+    
+    void printQueue();
 
-    void queueInsert(string url, string username, Node * node);
+    void queueInsert(string url, string username, string adstamp, string name);
     void queueRemove(string url, string username);
-    void queueUpvote(string url, string username, bool upvote);
+    void queueUpvote(string url, string username, int upvote);
+
+    void sync();
     
-    
+    void getTimestamps(string url, vector<Timestamp> &timestamps);
+    // queries the database for all the timestamps, groups them by url, and sorts them
+    // based on upvotes
     void getAllTimestamps(vector<pair<string, vector<Timestamp>>> &timestamps);
     
 

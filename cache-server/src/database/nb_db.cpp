@@ -234,8 +234,19 @@ void NbDB::adstampAllQuery(vector<vector<DBValue>> &addInfo){
     //return converted;
 }
 
+void NbDB::adstampsQuery(string url, vector<vector<DBValue>> &addInfo){
+    string stmt = "SELECT * FROM adstamp WHERE url = '" + url + "' ORDER BY upvotes DESC;";
+    PGresult* res = queryNB(pool, info, epoll_fd, stmt);
+    convertResult(res, addInfo);
+}
+
 void NbDB::insertAdstampQuery(string url, string username, string times, int upvotes, string name){
     string stmt = "INSERT INTO adstamp (url, username, times, upvotes, name) VALUES ('" + url + "', '" + username + "', '" + times + "', " + to_string(upvotes) + ", '" + name + "');";
     //cout << stmt << endl;
     PGresult* res = queryNB(pool, info, epoll_fd, stmt);
+}
+
+// this may a security vulnerability.
+void NbDB::syncCacheDatabase(string stmt){
+    PGresult* res = queryNB(pool, info, epoll_fd, stmt); 
 }

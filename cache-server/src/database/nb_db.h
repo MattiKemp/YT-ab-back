@@ -56,9 +56,14 @@ public:
      */
     void basicQuery(string table, int size, vector<vector<DBValue>> &addInfo);
 
+    // Queries all adstamps.
     void adstampAllQuery(vector<vector<DBValue>> &addInfo);
-
+    // Queries all adstamps for a certain url.
+    void adstampsQuery(string url, vector<vector<DBValue>> &addInfo);
+    // Insert ad stamp
     void insertAdstampQuery(string url, string username, string times, int upvotes, string name);
+    // Takes the query cache statements and runs them all in one transactions.
+    void syncCacheDatabase(string stmt);
     // Depricated, only really left in for testing.
     void printResult(PGresult *res);
 

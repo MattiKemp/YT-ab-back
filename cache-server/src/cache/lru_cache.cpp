@@ -49,22 +49,43 @@ vector<Timestamp> getAllTimeStampsBlocking(string url){
     return vector<Timestamp>();
 }
 
-void LRUCache::addNB(string url, Node * node){
-    LinkedList ll = this->linked_list;
+//void LRUCache::addNB(string url, string username, Node * node){
+//    LinkedList ll = this->linked_list;
+//    //cout << node->timestamps[0].upvotes << endl;
+//    auto func = [&node, this](Node*& n) { node = n; };
+//    this->nodes.try_emplace_l(url, func);
+//    // idk why tf I have to do this, but the docs are ass for this library so I have no idea how to
+//    // 1. map a url to a an already existing Node in one call.
+//    // 2. How to get the function to call using try_emplace_l, or another function for insertion.
+//    auto func2 = [node, this](Node*& n) {n = node; this->linked_list.addToBegin(n); };
+//    this->nodes.modify_if(url, func2);
+//    this->dbHandler->queueInsert(url, username, node->adstamp, node->name);
+//}
+
+void LRUCache::addNB(string url, string username, string adstamp){
+    Timestamp new_timestamp = Timestamp();
+    //LinkedList ll = this->linked_list;
     //cout << node->timestamps[0].upvotes << endl;
-    auto func = [&node, this](Node*& n) { node = n; };
+    auto func = [&new_timestamp](Node*& n) { cout << "addNB: node already exists" << endl; //n->addTimestamp(new_timestamp); 
+    };
     this->nodes.try_emplace_l(url, func);
     // idk why tf I have to do this, but the docs are ass for this library so I have no idea how to
     // 1. map a url to a an already existing Node in one call.
     // 2. How to get the function to call using try_emplace_l, or another function for insertion.
-    auto func2 = [node, this](Node*& n) {n = node; this->linked_list.addToBegin(n); };
+    auto func2 = [&new_timestamp, this](Node*& n) {
+        n->addTimestamp(new_timestamp); 
+        this->linked_list.addToBegin(n); 
+    };
     this->nodes.modify_if(url, func2);
+    // implement name later
+    this->dbHandler->queueInsert(url, username, adstamp, "");
 }
 
-bool LRUCache::removeNB(string url){
+bool LRUCache::removeNB(string url, string username){
     // might be a cleaner way to do this
     LinkedList ll = this->linked_list;
     auto func = [this](Node*& n) { this->linked_list.remove(n); return true; };
+    this->dbHandler->queueRemove(url, username);
     return this->nodes.erase_if(url, func);
 }
 

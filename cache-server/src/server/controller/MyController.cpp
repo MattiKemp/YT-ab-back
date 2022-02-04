@@ -11,18 +11,18 @@ string MyController::createTS(const oatpp::String& credentials) const{
     cout << "create timestamp endpoint" << endl;
     auto j = nlohmann::json::parse(credentials->c_str());
     cout << j.dump() << endl;
-    string times = j["adTimes"];
-    Timestamp new_timestamp = Timestamp();
-    new_timestamp.up_votes = 10;
+//    string times = j["adTimes"];
+//    Timestamp new_timestamp = Timestamp();
+//    new_timestamp.up_votes = 10;
 //    for(int i = 0; i < times.size(); i+=2){
 //        new_timestamp.ad_times.push_back(make_pair(times[i], times[i+1]));
 //    }
-    new_timestamp.ad_times = times;
+//    new_timestamp.ad_times = times;
     // not sure if we should set null pointers for the initial prev and next :/
     // need to look more into this.
-    Node * temp = new Node();
-    temp->timestamps.push_back(new_timestamp);
-    this->cache->addNB(j["url"], temp);
+//    Node * temp = new Node();
+//    temp->timestamps.push_back(new_timestamp);
+    this->cache->addNB(j["url"], j["user"], j["adTimes"]);
     //this->cache->addBlocking(j["url"], temp);
     return "{\"valid\":\"YES\"}";
 }
@@ -31,7 +31,7 @@ string MyController::removeTS(const oatpp::String& credentials) const{
     cout << "remove timestamp endpoint" << endl;
     auto j = nlohmann::json::parse(credentials->c_str());
     cout << j.dump() << endl;
-    this->cache->removeNB(j["url"]);
+    this->cache->removeNB(j["url"], j["user"]);
     return "{\"valid\":\"YES\"}";
 }
 

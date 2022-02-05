@@ -58,7 +58,7 @@ void CacheDBHandler::queueUpvote(string url, string username, int upvote){
 void CacheDBHandler::sync(){
     // not sure if this will fuck up the queue bc it is blocking.
     // add memory reserving later.
-    string query = "BEGIN; ";
+    string query = "BEGIN ; ";
     for (const auto& n : this->queryQueue){
         cout << n.first << ":" << endl;
         this->queryQueue[n.first].print();
@@ -74,8 +74,11 @@ void CacheDBHandler::sync(){
         }
     }
     query += "COMMIT ;";
+    cout << query << endl;
     this->queryQueue.clear();
-    this->db->syncCacheDatabase(query);
+    if(query != "BEGIN ; COMMIT ;"){
+        this->db->syncCacheDatabase(query);
+    }
 }
 
 void CacheDBHandler::getTimestamps(string url, vector<Timestamp> &timestamps){

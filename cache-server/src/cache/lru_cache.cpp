@@ -4,6 +4,17 @@ void LRUCache::printLinkedList(){
     this->linked_list.print();
 }
 
+//class DatabaseSyncer : public oatpp::async::Coroutine<DatabaseSyncer> {
+//private:
+//    CacheDBHandler * dbHandler;
+//public:
+//    DatbaseSyncer(CacheDBHandler * dbHandler): dbHandler(dbHandler) {}
+//    Action act() override {
+//        cout << "test coroutine" << endl;
+//        return waitRepeat();
+//    }
+//};
+
 LRUCache::LRUCache(){
     vector<pair<string, vector<Timestamp>>> stamps;
     this->dbHandler->getAllTimestamps(stamps);
@@ -15,6 +26,7 @@ LRUCache::LRUCache(){
         //this->addNB(stamps[i].first, newNode);
     }
     printLinkedList();
+    this->executor->execute<DatabaseSyncer>(this->dbHandler);
 }
 
 void LRUCache::addBlocking(string url, Node * node){
